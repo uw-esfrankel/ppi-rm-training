@@ -14,7 +14,7 @@
 #SBATCH --export=all
 #SBATCH --output=slurm/logs/%x_%A_%a.out
 #SBATCH --error=slurm/logs/%x_%A_%a.err
-#SBATCH --array=0-59
+#SBATCH --array=0-99
 
 module load cuda/12.4.1 
 module load gcc/9.3.0
@@ -28,5 +28,5 @@ python reannotate_ratings.py --model_name Qwen/Qwen2.5-72B-Instruct \
                              --k_val 7 \
                              --slurm_task_id $SLURM_ARRAY_TASK_ID \
                              --slurm_num_tasks $SLURM_ARRAY_TASK_COUNT \
-                             --num-processes 32 \
+                             --num-processes 64 \
                              --seed 42 

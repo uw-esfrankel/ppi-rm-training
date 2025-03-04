@@ -3,7 +3,7 @@
 #SBATCH --mail-type=ARRAY_TASKS,FAIL,INVALID_DEPEND
 #SBATCH --mail-user=ericsf@cs.washington.edu
 #SBATCH --account=sewoong
-#SBATCH --partition=ckpt-all
+#SBATCH --partition=gpu-a40
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=80G
@@ -14,7 +14,7 @@
 #SBATCH --export=all
 #SBATCH --output=slurm/logs/%x_%A_%a.out
 #SBATCH --error=slurm/logs/%x_%A_%a.err
-#SBATCH --array=0-159
+#SBATCH --array=0-99
 
 module load cuda/12.4.1 
 module load gcc/9.3.0

@@ -240,7 +240,20 @@ def get_pairwise_rating(ranking_order, data_prompt, data_answers, shuffle, expla
 
     return ranks
 
-
+def get_processed_prompts(dirname: str, slurm_task_id: int):
+    """Get set of prompts that have already been processed."""
+    processed_prompts = set()
+    
+    # Check both temporary and final output files
+    for f in os.listdir(dirname):
+        if (f.startswith(f"temp-{slurm_task_id}-") or f == f"rankings-{slurm_task_id}.jsonl") and f.endswith(".jsonl"):
+            try:
+                with jsonlines.open(os.path.join(dirname, f)) as reader:
+                    for item in reader:
+                        processed_prompts.add(item['prompt'])
+            except Exception as e:
+                print(f"Warning: Error reading file {f}: {e}")
+    return processed_prompts
 
 def pool_process(inputs, verbose=False):
     data, dirname, k, seed, vllm_url, slurm_task_id, shuffle, explain, do_pairwise, model_name = inputs
@@ -249,6 +262,9 @@ def pool_process(inputs, verbose=False):
     data_answers = get_data_answers(k, data)
     data_prompt = get_data_prompt(data)
 
+    # Skip if we've already processed this prompt
+    if data_prompt in get_processed_prompts(dirname, slurm_task_id):
+        return
 
     ranking_info = get_ranking(list(data_answers), data_prompt, explain, k, dirname, vllm_url, model_name)
 
@@ -277,6 +293,9 @@ def reannotate_nectar(dirname: str, vllm_manager: VLLMManager, slurm_task_id: in
     end_pct = int(round(100 * (slurm_task_id + 1) / slurm_num_tasks, 2))
 
     data = load_dataset("berkeley-nest/Nectar", split=f"train[{start_pct}%:{end_pct}%]").shuffle(seed=seed)
+    
+    # Get already processed prompts
+    processed_prompts = get_processed_prompts(dirname, slurm_task_id)
         
     # Cap the number of processes at the number of rows in the dataset minus the start row, or number of cpus
     num_processes = min(num_processes, len(data), multiprocessing.cpu_count() - 1)
@@ -287,13 +306,17 @@ def reannotate_nectar(dirname: str, vllm_manager: VLLMManager, slurm_task_id: in
 
         for i in range(0, data.num_rows):
             data_row = data[i]
-            if len(data_row['answers']) >= k_val:# and data_row['answers'][0]['rank'] is None:
+            # Skip if we've already processed this prompt
+            if data_row['prompt'] in processed_prompts:
+                continue
+                
+            if len(data_row['answers']) >= k_val:
                 if count < max_num:
                     count += 1
                     yield data_row, dirname, k_val, np.random.randint(0, 9999999), vllm_manager.vllm_url, slurm_task_id, shuffle, explain, do_pairwise, vllm_manager.model_name
                 else:
                     break
-        print(f"PROCESSING {count} RESPONSES")
+        print(f"PROCESSING {count} NEW RESPONSES")
         return
     
     print(inspect.getsource(get_system_prompt), file=open(f"{dirname}/prompt_log.txt", 'w'))
