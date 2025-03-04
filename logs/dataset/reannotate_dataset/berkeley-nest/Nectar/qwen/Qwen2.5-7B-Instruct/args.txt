@@ -1,1 +1,0 @@
-Namespace(dataset_name='berkeley-nest/Nectar', model_name='qwen/Qwen2.5-7B-Instruct', log_dir='logs', seed=42)
