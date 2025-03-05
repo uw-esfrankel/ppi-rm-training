@@ -14,6 +14,7 @@ import itertools
 import inspect
 import json
 
+from utils.message_utils import generate
 from utils.vllm_manager import VLLMManager
 
 MODEL_ALPHABET = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -52,12 +53,6 @@ Finally, considering these pairwise rankings, please rank all {k} responses in a
 
 Avoid any positional biases and ensure that the order in which the responses were presented does not influence your decision. Do not allow the length of the responses to influence your evaluation. Do not favor certain names of the assistants. Be as objective as possible.\n\n"""
 
-
-
-
-
-
-
 def get_user_prompt(prompt, answers, miniheader="INPUT:\n", minifooter="OUTPUT:\n"):
     k = len(answers)
     output = miniheader
@@ -72,43 +67,6 @@ def get_user_prompt(prompt, answers, miniheader="INPUT:\n", minifooter="OUTPUT:\
     #output += "PAIRWISE EVALUATION ORDER: " + str([tuple(np.random.permutation(t).tolist()) for t in np.random.permutation(list(itertools.combinations(MODEL_ALPHABET[:k], 2))).tolist()]) + "\n\n"
     #output += "PAIRWISE EVALUATION ORDER: " + str(list(itertools.combinations(MODEL_ALPHABET[:k], 2))) + "\n\n"
     return output + minifooter
-
-def generate_using_vllm(system_prompt, prompt, vllm_server_url, model_name):
-    system = {
-        "role": "system",
-        "content": system_prompt
-    }
-
-    message = {
-        "role": "user",
-        "content": prompt
-    }
-        
-    client = openai.OpenAI(
-        base_url=f"{vllm_server_url}/v1",
-        api_key="ppi"
-    )
-    response = client.chat.completions.create(
-        model=model_name,
-        messages=[system, message],
-        temperature=0.0,
-    )
-    return response.choices[0].message.content
-    
-
-def generate(system_prompt, prompt, vllm_server_url, model_name):
-    while True:
-        try:
-            return generate_using_vllm(system_prompt, prompt, vllm_server_url, model_name)
-        except requests.RequestException as e:
-            print(f"Error during generation from the text generation interface: {e}. Retrying in 10 seconds.")
-            time.sleep(10)
-        except openai.APIError as e:
-            print(f"WARNING {e}. Retrying in 10 seconds.")
-            time.sleep(10)
-        except Exception as e:
-            print(f"WARNING: Unexpected exception in generate function {e}")
-            return False
         
 def get_data_answers(k, data):
     return np.random.permutation(data['answers'])[:k]

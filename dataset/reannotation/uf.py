@@ -1,8 +1,2 @@
-
-
-
-
-
-
-if __name__ == "__main__":
-    main()
+def reannotate_uf():
+    pass

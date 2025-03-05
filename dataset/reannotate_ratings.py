@@ -1,9 +1,8 @@
 import argparse
 from pathlib import Path
 
-from datasets import load_dataset
-
 from reannotation.nectar import reannotate_nectar
+from reannotation.uf import reannotate_uf
 from utils.vllm_manager import VLLMManager
 
 
@@ -45,6 +44,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+
+    parser.add_argument("--seed", type=int, default=42)
     
     # vllm arguments
     parser.add_argument("--model_name", type=str, required=True)
@@ -55,7 +56,6 @@ if __name__ == "__main__":
     # dataset arguments
     parser.add_argument("--dataset_name", choices=["nectar", "uf"], type=str, required=True)
     parser.add_argument("--dirname", type=str, default="results")
-    parser.add_argument("--seed", type=int, default=42)
     
     # nectar-specific arguments
     parser.add_argument('--num-processes', type=int, default=64, help='Number of parallel process to spawn')
