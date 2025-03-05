@@ -83,14 +83,15 @@ def generate_using_vllm(system_prompt, prompt, vllm_server_url, model_name):
         "role": "user",
         "content": prompt
     }
-    
+        
     client = openai.OpenAI(
-        base_url=f"{vllm_server_url}/v1"
+        base_url=f"{vllm_server_url}/v1",
+        api_key="ppi"
     )
     response = client.chat.completions.create(
         model=model_name,
         messages=[system, message],
-        temperature=0.0
+        temperature=0.0,
     )
     return response.choices[0].message.content
     
@@ -186,16 +187,32 @@ def get_ranking(data_answers, data_prompt, explain, k, dirname, vllm_server_url,
         return None
 
     rating_text = generate(system_prompt, user_prompt, vllm_server_url, model_name)
+    
+    max_retries = 3  # Limit the number of retries to avoid infinite loops
+    retry_count = 0
+    
+    while retry_count < max_retries:
+        log_append(system_prompt, user_prompt, rating_text, dirname)
 
-    log_append(system_prompt, user_prompt, rating_text, dirname)
+        if rating_text is False:
+            print("WARNING: Generation failed for unknown reason. Skipped")
+            return None
 
-    if rating_text is False:
-        print("WARNING: Generation failed for unknown reason.  Skipped")
-        return None
+        rank_list = parse_ranking(rating_text)
 
-    rank_list = parse_ranking(rating_text)
-
-    if rank_list is False:
+        if rank_list is False:
+            return None
+            
+        # Check if rank_list has any repeats
+        if len(set(rank_list)) == len(rank_list):
+            break  # Valid ranking with no repeats
+        
+        print(f"WARNING: Ranking contains duplicates: {rank_list}. Retrying... ({retry_count + 1}/{max_retries})")
+        rating_text = generate(system_prompt, user_prompt, vllm_server_url, model_name)
+        retry_count += 1
+    
+    if retry_count == max_retries:
+        print("WARNING: Failed to get unique ranking after max retries. Skipped")
         return None
     
     models = get_answer_models(data_answers)

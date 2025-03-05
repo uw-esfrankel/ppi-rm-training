@@ -47,7 +47,7 @@ class VLLMManager:
             return
         
         self.port = get_free_port(port)
-        command = ['vllm', 'serve', model_name, '--tensor-parallel-size', str(num_gpus), '--port', str(self.port), '--seed', str(seed)]
+        command = ['vllm', 'serve', model_name, '--tensor-parallel-size', str(num_gpus), '--port', str(self.port), '--seed', str(seed), '--api-key', 'ppi']
         
         if vllm_process_outdir:
             os.makedirs(vllm_process_outdir, exist_ok=True)

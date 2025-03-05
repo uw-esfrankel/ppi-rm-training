@@ -3,7 +3,7 @@
 #SBATCH --mail-type=ARRAY_TASKS,FAIL,INVALID_DEPEND
 #SBATCH --mail-user=ericsf@cs.washington.edu
 #SBATCH --account=sewoong
-#SBATCH --partition=gpu-l40s
+#SBATCH --partition=ckpt-all
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=80G

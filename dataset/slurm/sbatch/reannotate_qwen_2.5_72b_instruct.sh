@@ -3,11 +3,11 @@
 #SBATCH --mail-type=ARRAY_TASKS,FAIL,INVALID_DEPEND
 #SBATCH --mail-user=ericsf@cs.washington.edu
 #SBATCH --account=sewoong
-#SBATCH --partition=ckpt-all
+#SBATCH --partition=gpu-l40s
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=150G
-#SBATCH --gpus=4
+#SBATCH --gpus=8
 #SBATCH --constraint=a100|l40s|l40|a40
 #SBATCH --time=08:00:00
 #SBATCH --chdir=/gscratch/sewoong/ericsf/ppi-rm-training/dataset
@@ -22,7 +22,7 @@ module load gcc/9.3.0
 source .venv/bin/activate
 
 python reannotate_ratings.py --model_name Qwen/Qwen2.5-72B-Instruct \
-                             --num_gpus 4 \
+                             --num_gpus 8 \
                              --port 8000 \
                              --dataset_name nectar \
                              --k_val 7 \

@@ -7,7 +7,7 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=100G
-#SBATCH --gpus=2
+#SBATCH --gpus=1
 #SBATCH --constraint=a100|l40s|l40|a40
 #SBATCH --time=08:00:00
 #SBATCH --chdir=/gscratch/sewoong/ericsf/ppi-rm-training/dataset
@@ -22,7 +22,7 @@ module load gcc/9.3.0
 source .venv/bin/activate
 
 python reannotate_ratings.py --model_name Qwen/Qwen2.5-14B-Instruct \
-                             --num_gpus 2 \
+                             --num_gpus 1 \
                              --port 8000 \
                              --dataset_name nectar \
                              --k_val 7 \

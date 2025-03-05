@@ -37,7 +37,7 @@ python reannotate_ratings.py --model_name <model_name> --dataset_name <dataset_n
 
 To binarize a dataset, we can run:
 ```bash
-python binarize_dataset.py --dataset_name <dataset_name> --output_dir <output_dir>
+python binarize_datasets.py
 ```
 
 ## Preference Elicitation
