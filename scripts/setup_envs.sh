@@ -38,7 +38,7 @@ if [ ! -d "evals/rewardbench/.venv" ]; then
     echo "uv environment not found in evals/rewardbench. Installing uv environment..."
     cd evals/rewardbench
     uv venv --python 3.12
-    uv pip install rewardbench
+    uv pip install -r requirements.txt
     cd ../../
 else
     echo "uv environment already exists in evals/rewardbench"
@@ -50,7 +50,7 @@ if [ ! -d "train/OpenRLHF/.venv" ]; then
     cd train/OpenRLHF
     uv venv --python 3.12
     uv pip install torch setuptools wheel psutil
-    uv pip install --no-build-isolation flash-attn==2.7.1.post4 --no-build-isolation
+    uv pip install --no-build-isolation flash-attn==2.7.1.post4
     uv pip install -e .[vllm]
     cd ../../
 else
