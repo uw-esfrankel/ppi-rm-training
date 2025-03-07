@@ -1,6 +1,6 @@
-[submodule "evals/PPE"]
-	path = evals/PPE
-	url = git@github.com:uw-esfrankel/PPE.git
 [submodule "train/OpenRLHF"]
 	path = train/OpenRLHF
-	url = git@github.com:uw-esfrankel/OpenRLHF.git
+	url = https://github.com/uw-esfrankel/OpenRLHF.git
+[submodule "evals/PPE"]
+	path = evals/PPE
+	url = https://github.com/uw-esfrankel/PPE.git
