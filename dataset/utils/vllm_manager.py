@@ -35,7 +35,7 @@ def wait_for_vllm(port: int):
             
 
 class VLLMManager:
-    def __init__(self, model_name: str, num_gpus: int = 1, port: int = 8000, vllm_process_outdir: str = None, seed: int = 42):
+    def __init__(self, model_name: str, is_preference_elicit_task: bool = False, num_gpus: int = 1, port: int = 8000, vllm_process_outdir: str = None, seed: int = 42):
         self.model_name = model_name
         
         # checks if vllm is already running
@@ -47,7 +47,9 @@ class VLLMManager:
             return
         
         self.port = get_free_port(port)
-        command = ['vllm', 'serve', model_name, '--tensor-parallel-size', str(num_gpus), '--port', str(self.port), '--seed', str(seed), '--api-key', 'ppi']
+        command = ['vllm', 'serve', model_name, '--tensor-parallel-size', str(num_gpus), '--port', str(self.port), '--seed', str(seed), '--api-key', 'ppi', '--gpu-memory-utilization', '0.95']
+        if is_preference_elicit_task and "70B" in model_name:
+            command.append('--max-model-len', '65536')
         
         if vllm_process_outdir:
             os.makedirs(vllm_process_outdir, exist_ok=True)

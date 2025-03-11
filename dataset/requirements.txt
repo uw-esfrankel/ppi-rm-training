@@ -2,3 +2,4 @@ vllm
 datasets
 setuptools
 jsonlines
+nvitop
