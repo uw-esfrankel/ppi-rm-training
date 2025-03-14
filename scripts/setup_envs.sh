@@ -6,7 +6,8 @@
 # if uv is not installed, install it, otherwise just say uv is installed
 if ! command -v uv &> /dev/null; then
     echo "uv is not installed. Installing uv..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh 
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    source $HOME/.local/bin/env 
 else
     echo "uv is installed"
 fi
