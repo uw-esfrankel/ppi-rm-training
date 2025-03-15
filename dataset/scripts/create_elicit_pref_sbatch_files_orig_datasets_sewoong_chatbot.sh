@@ -39,7 +39,7 @@ for size in "${gemma_model_sizes[@]}"; do
 done
 
 # Declare two separate arrays that we'll iterate over in parallel
-dataset_names=("HelpSteer2")
+dataset_names=("ChatbotArena55k")
 num_slurm_jobs=(20)
 
 # Now setting up folders as needed
@@ -70,7 +70,7 @@ file_content="#!/bin/bash
 #SBATCH --mail-type=END,FAIL,INVALID_DEPEND
 #SBATCH --mail-user=ericsf@cs.washington.edu
 #SBATCH --account=sewoong
-#SBATCH --partition=gpu-l40s
+#SBATCH --partition=ckpt-all
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=80G

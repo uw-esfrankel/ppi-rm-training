@@ -8,7 +8,7 @@ get_num_gpus() {
     local size=$1
     local num_gpus
     if (( $(echo "$size > 32" | bc -l) )); then
-        num_gpus=4
+        num_gpus=8
     elif (( $(echo "$size >= 14" | bc -l) )); then
         num_gpus=2
     else
@@ -39,7 +39,7 @@ for size in "${gemma_model_sizes[@]}"; do
 done
 
 # Declare two separate arrays that we'll iterate over in parallel
-dataset_names=("HelpSteer2")
+dataset_names=("HelpSteer")
 num_slurm_jobs=(20)
 
 # Now setting up folders as needed
@@ -70,9 +70,9 @@ file_content="#!/bin/bash
 #SBATCH --mail-type=END,FAIL,INVALID_DEPEND
 #SBATCH --mail-user=ericsf@cs.washington.edu
 #SBATCH --account=sewoong
-#SBATCH --partition=gpu-l40s
+#SBATCH --partition=gpu-a40
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=6
 #SBATCH --mem=80G
 #SBATCH --gpus=${num_gpus}
 #SBATCH --constraint=a40|a100|l40|l40s

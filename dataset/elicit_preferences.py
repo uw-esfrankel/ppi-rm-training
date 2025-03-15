@@ -269,15 +269,14 @@ def process_dataset(dataset, dataset_name, seed, llm):
     indices_to_keep_parsed = [
         i for i in range(len(parsed_outputs)) if parsed_outputs[i] is not None
     ]
-    # only keep the indices where the two responses are different
+    # only keep the indices where the two responses are different and better_answer is 1 or 2
     indices_to_keep_distinct = [
         i
-        for i in range(len(chosen_list))
+        for i in indices_to_keep_parsed  # Only iterate over valid indices
         if chosen_list[i][-1]["content"] != rejected_list[i][-1]["content"]
+        and parsed_outputs[i]["better_answer"] in [1, 2]
     ]
-    indices_to_keep = sorted(
-        list(set(indices_to_keep_parsed) & set(indices_to_keep_distinct))
-    )
+    indices_to_keep = sorted(indices_to_keep_distinct)  # No need for set intersection
 
     parsed_outputs_to_keep = [parsed_outputs[i] for i in indices_to_keep]
     chosen_list_to_keep = [chosen_list[i] for i in indices_to_keep]

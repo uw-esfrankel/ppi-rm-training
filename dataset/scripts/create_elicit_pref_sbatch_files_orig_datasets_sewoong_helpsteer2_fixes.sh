@@ -8,7 +8,7 @@ get_num_gpus() {
     local size=$1
     local num_gpus
     if (( $(echo "$size > 32" | bc -l) )); then
-        num_gpus=4
+        num_gpus=8
     elif (( $(echo "$size >= 14" | bc -l) )); then
         num_gpus=2
     else
@@ -76,7 +76,7 @@ file_content="#!/bin/bash
 #SBATCH --mem=80G
 #SBATCH --gpus=${num_gpus}
 #SBATCH --constraint=a40|a100|l40|l40s
-#SBATCH --time=4:00:00 # Max runtime in DD-HH:MM:SS format.
+#SBATCH --time=12:00:00 # Max runtime in DD-HH:MM:SS format.
 #SBATCH --chdir=/gscratch/sewoong/ericsf/ppi-rm-training/dataset
 #SBATCH --export=all
 #SBATCH --output=/gscratch/sewoong/ericsf/ppi-rm-training/dataset/slurm/elicit_pref_orig_datasets/logs/${dataset_name}/${model_identifier}/%x_%A_%a.out
