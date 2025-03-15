@@ -386,13 +386,24 @@ def main(args):
     model_name_split = model_name.split("/")[-1]
 
     dataset_split_names = get_dataset_split_names(dataset_name)
-
-    llm = LLM(
-        model=model_name,
-        tensor_parallel_size=args.num_gpus,
-        seed=seed,
-        gpu_memory_utilization=0.95,
-    )
+    
+    print(f"Debug: model_name = {model_name}")
+    if "llama" in model_name.lower():
+        print(f"Using max_seq_len_to_capture=65536 for {model_name}")
+        llm = LLM(
+            model=model_name,
+            tensor_parallel_size=args.num_gpus,
+            seed=seed,
+            gpu_memory_utilization=0.95,
+            max_seq_len_to_capture=65536,
+        )
+    else:
+        llm = LLM(
+            model=model_name,
+            tensor_parallel_size=args.num_gpus,
+            seed=seed,
+            gpu_memory_utilization=0.95,
+        )
 
     for dataset_split in dataset_split_names:
         # Update dirname to include task ID
