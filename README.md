@@ -10,5 +10,5 @@ module load gcc/9.3.0
 ### Install Dependencies
 To install all dependencies, run the following:
 ```
-bash scripts/setup_env_hyak.sh
+bash scripts/setup_envs.sh
 ```

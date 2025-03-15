@@ -2,3 +2,5 @@ slurm/logs/**/*
 .venv/**/*
 results/
 slurm/
+figures/
+*.pkl
