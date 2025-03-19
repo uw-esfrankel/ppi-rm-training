@@ -39,6 +39,8 @@ if [ ! -d "evals/reward-bench/.venv" ]; then
     echo "uv environment not found in evals/reward-bench. Installing uv environment..."
     cd evals/reward-bench
     uv venv --python 3.12
+    uv pip install torch
+    uv pip install --no-build-isolation flash-attn==2.7.1.post4
     uv pip install -e .
     cd ../../
 else
