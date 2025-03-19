@@ -4,3 +4,6 @@
 [submodule "evals/PPE"]
 	path = evals/PPE
 	url = https://github.com/uw-esfrankel/PPE.git
+[submodule "evals/reward-bench"]
+	path = evals/reward-bench
+	url = https://github.com/uw-esfrankel/reward-bench.git
