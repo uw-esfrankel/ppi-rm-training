@@ -35,14 +35,14 @@ else
 fi
 
 # install uv environment in evals/rewardbench if not already installed, otherwise just say uv environment is installed
-if [ ! -d "evals/rewardbench/.venv" ]; then
-    echo "uv environment not found in evals/rewardbench. Installing uv environment..."
-    cd evals/rewardbench
+if [ ! -d "evals/reward-bench/.venv" ]; then
+    echo "uv environment not found in evals/reward-bench. Installing uv environment..."
+    cd evals/reward-bench
     uv venv --python 3.12
-    uv pip install -r requirements.txt
+    uv pip install -e .
     cd ../../
 else
-    echo "uv environment already exists in evals/rewardbench"
+    echo "uv environment already exists in evals/reward-bench"
 fi
 
 # install uv environment in train/OpenRLHF if not already installed, otherwise just say uv environment is installed
@@ -57,5 +57,3 @@ if [ ! -d "train/OpenRLHF/.venv" ]; then
 else
     echo "uv environment already exists in train/OpenRLHF"
 fi
-
-
