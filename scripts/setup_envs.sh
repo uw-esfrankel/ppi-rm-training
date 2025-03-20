@@ -29,6 +29,7 @@ if [ ! -d "evals/PPE/.venv" ]; then
     cd evals/PPE
     uv venv --python 3.12
     uv pip install -r requirements.txt
+    uv pip install --no-build-isolation flash-attn==2.7.1.post4
     cd ../../
 else
     echo "uv environment already exists in evals/PPE"
@@ -39,9 +40,8 @@ if [ ! -d "evals/reward-bench/.venv" ]; then
     echo "uv environment not found in evals/reward-bench. Installing uv environment..."
     cd evals/reward-bench
     uv venv --python 3.12
-    uv pip install torch
-    uv pip install --no-build-isolation flash-attn==2.7.1.post4
     uv pip install -e .
+    uv pip install --no-build-isolation flash-attn==2.7.1.post4
     cd ../../
 else
     echo "uv environment already exists in evals/reward-bench"
@@ -52,9 +52,9 @@ if [ ! -d "train/OpenRLHF/.venv" ]; then
     echo "uv environment not found in train/OpenRLHF. Installing uv environment..."
     cd train/OpenRLHF
     uv venv --python 3.12
+    uv pip install -e .[vllm]
     uv pip install torch setuptools wheel psutil
     uv pip install --no-build-isolation flash-attn==2.7.1.post4
-    uv pip install -e .[vllm]
     cd ../../
 else
     echo "uv environment already exists in train/OpenRLHF"
