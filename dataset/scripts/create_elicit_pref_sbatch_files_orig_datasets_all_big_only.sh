@@ -39,8 +39,8 @@ for size in "${gemma_model_sizes[@]}"; do
 done
 
 # Declare two separate arrays that we'll iterate over in parallel
-dataset_names=("HelpSteer" "HelpSteer2" "UltraFeedback" "Nectar" "ChatbotArena55k")
-num_slurm_jobs=(20 20 60 100 20)
+dataset_names=("Nectar")
+num_slurm_jobs=(100)
 
 # Now setting up folders as needed
 mkdir -p slurm/elicit_pref_orig_datasets
@@ -70,7 +70,7 @@ file_content="#!/bin/bash
 #SBATCH --mail-type=END,FAIL,INVALID_DEPEND
 #SBATCH --mail-user=ericsf@cs.washington.edu
 #SBATCH --account=sewoong
-#SBATCH --partition=gpu-a40
+#SBATCH --partition=ckpt-all
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=80G

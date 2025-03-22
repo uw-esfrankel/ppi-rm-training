@@ -1,6 +1,7 @@
 import pandas as pd
 from datasets import load_dataset, Dataset
 from scipy import datasets
+from huggingface_hub import repo_exists
 
 
 MODEL_SIZES = {
@@ -36,6 +37,11 @@ def main():
         original_binarized_dataset = original_binarized_dataset.remove_columns(["chosen_rating", "rejected_rating"])
 
         for split in original_binarized_dataset.keys():
+            # if the combined dataset already exists, skip
+            if repo_exists(f"esfrankel17/{base_dataset_name}_binarized_w_weak_preferences", split=split):
+                print(f"Skipping {base_dataset_name} {split} because it already exists")
+                continue
+            
             merged_split = original_binarized_dataset[split].to_pandas()
             original_num_rows = merged_split.shape[0]
 
@@ -108,6 +114,7 @@ def main():
             # convert to dataset
             merged_split = Dataset.from_pandas(merged_split)
             merged_split.push_to_hub(f"esfrankel17/{base_dataset_name}_binarized_w_weak_preferences", split=split)
+            print(f"Finished processing {base_dataset_name} {split}")
                     
 
 if __name__ == "__main__":
