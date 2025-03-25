@@ -24,3 +24,4 @@ if [ ! -d "train/OpenRLHF/.venv" ]; then
     cd ../../
 else
     echo "uv environment already exists in train/OpenRLHF"
+done
