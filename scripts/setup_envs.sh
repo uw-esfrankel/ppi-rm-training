@@ -61,3 +61,15 @@ if [ ! -d "train/OpenRLHF/.venv" ]; then
 else
     echo "uv environment already exists in train/OpenRLHF"
 fi
+
+git clone https://github.com/mlfoundations/evalchemy.git  
+cd evalchemy
+uv venv --python 3.10
+source .venv/bin/activate
+pip install -e .
+pip install -e eval/chat_benchmarks/alpaca_eval
+
+git config --global credential.helper store
+huggingface-cli login --token $HF_TOKEN --add-to-git-credential
+
+cd ..

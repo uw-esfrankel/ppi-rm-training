@@ -7,3 +7,6 @@
 [submodule "evals/reward-bench"]
 	path = evals/reward-bench
 	url = https://github.com/uw-esfrankel/reward-bench.git
+[submodule "evals/evalchemy"]
+	path = evals/evalchemy
+	url = https://github.com/uw-esfrankel/evalchemy.git
