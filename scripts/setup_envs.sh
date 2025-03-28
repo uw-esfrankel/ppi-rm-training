@@ -48,6 +48,19 @@ else
     echo "uv environment already exists in evals/reward-bench"
 fi
 
+# install uv environment in evals/evalchemy if not already installed, otherwise just say uv environment is installed
+if [ ! -d "evals/evalchemy/.venv" ]; then
+    echo "uv environment not found in evals/evalchemy. Installing uv environment..."
+    cd evals/evalchemy
+    uv venv --python 3.10
+    uv pip install -e .
+    uv pip install -e eval/chat_benchmarks/alpaca_eval
+    uv pip install -e eval/chat_benchmarks/MTBench
+    cd ../../
+else
+    echo "uv environment already exists in evals/reward-bench"
+fi
+
 # install uv environment in train/OpenRLHF if not already installed, otherwise just say uv environment is installed
 if [ ! -d "train/OpenRLHF/.venv" ]; then
     echo "uv environment not found in train/OpenRLHF. Installing uv environment..."
@@ -56,7 +69,7 @@ if [ ! -d "train/OpenRLHF/.venv" ]; then
     uv pip install -e .[vllm]
     uv pip install torch setuptools wheel psutil
     uv pip install --no-build-isolation flash-attn==2.7.1.post4
-    uv pip install huggingface_hub[hf_transfer] liger-kernel
+    uv pip install huggingface_hub[hf_transfer] liger-kernel alpaca_eval
     cd ../../
 else
     echo "uv environment already exists in train/OpenRLHF"
