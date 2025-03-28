@@ -56,6 +56,7 @@ if [ ! -d "train/OpenRLHF/.venv" ]; then
     uv pip install -e .[vllm]
     uv pip install torch setuptools wheel psutil
     uv pip install --no-build-isolation flash-attn==2.7.1.post4
+    uv pip install huggingface_hub[hf_transfer] liger-kernel
     cd ../../
 else
     echo "uv environment already exists in train/OpenRLHF"
